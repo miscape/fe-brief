@@ -18,6 +18,7 @@ jobs:
         working-directory: backend
 
     env:
+      PYTHONPATH: "."
       DATABASE_URL: "sqlite+pysqlite:///:memory:"
       SOURCES_FILE: "../sources.example.yaml"
 
