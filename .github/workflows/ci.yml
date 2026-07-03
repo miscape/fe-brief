@@ -18,8 +18,8 @@ jobs:
         working-directory: backend
 
     env:
-      DATABASE_URL: sqlite+pysqlite:///:memory:
-      SOURCES_FILE: ../sources.example.yaml
+      DATABASE_URL: "sqlite+pysqlite:///:memory:"
+      SOURCES_FILE: "../sources.example.yaml"
 
     steps:
       - name: Checkout
