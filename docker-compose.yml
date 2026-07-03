@@ -1,0 +1,75 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: fe_brief
+      POSTGRES_USER: fe_brief
+      POSTGRES_PASSWORD: change-me
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U fe_brief -d fe_brief"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+
+  backend:
+    image: fe-brief-backend:local
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    environment:
+      APP_ENV: docker
+      DATABASE_URL: postgresql+psycopg://fe_brief:change-me@postgres:5432/fe_brief
+      REDIS_URL: redis://redis:6379/0
+      SOURCES_FILE: /app/sources.yaml
+      CORS_ORIGINS: http://localhost:4321,http://127.0.0.1:4321
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./sources.yaml:/app/sources.yaml:ro
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
+
+  worker:
+    image: fe-brief-backend:local
+    command: ["python", "/app/worker/run.py", "--loop", "--interval", "3600"]
+    environment:
+      APP_ENV: docker
+      DATABASE_URL: postgresql+psycopg://fe_brief:change-me@postgres:5432/fe_brief
+      REDIS_URL: redis://redis:6379/0
+      SOURCES_FILE: /app/sources.yaml
+    volumes:
+      - ./sources.yaml:/app/sources.yaml:ro
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
+      backend:
+        condition: service_started
+
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+      args:
+        PUBLIC_API_BASE_URL: http://127.0.0.1:8000
+    ports:
+      - "4321:80"
+    depends_on:
+      backend:
+        condition: service_started
+
+volumes:
+  postgres_data:
