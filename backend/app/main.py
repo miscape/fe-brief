@@ -5,11 +5,9 @@ from fastapi import Depends, FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 
-from app.config import load_sources
 from app.database import create_db_tables, get_db
+from app.fetch_service import run_fetch_cycle
 from app.repository import article_to_dict, list_articles as list_saved_articles
-from app.repository import save_articles
-from app.rss_fetcher import fetch_articles_from_sources
 
 
 @asynccontextmanager
@@ -52,17 +50,14 @@ def list_articles(db: Session = Depends(get_db)):
 @app.post("/api/fetch/run")
 def run_fetch(db: Session = Depends(get_db)):
     try:
-        sources = load_sources()
-        result = fetch_articles_from_sources(sources)
+        result = run_fetch_cycle(db)
     except (FileNotFoundError, ValueError) as error:
         raise HTTPException(status_code=500, detail=str(error)) from error
 
-    saved = save_articles(db, result["articles"])
-
     return {
         "status": "completed",
-        "sources": len(sources),
-        "fetched_articles": len(result["articles"]),
-        "saved_articles": saved,
+        "sources": result["sources"],
+        "fetched_articles": result["fetched_articles"],
+        "saved_articles": result["saved_articles"],
         "errors": result["errors"],
     }

@@ -73,7 +73,7 @@ The real `.env` and `sources.yaml` files are ignored by Git because they can con
 - [ ] Fase 1: create FastAPI backend with health, article list, and manual fetch endpoints.
 - [ ] Fase 2: parse RSS/feed sources, save articles in PostgreSQL, deduplicate by URL hash.
 - [ ] Fase 3: create Astro frontend with chronological article list.
-- [ ] Fase 4: create Python worker that fetches sources every hour.
+- [x] Fase 4: create Python worker that fetches sources every hour.
 - [ ] Fase 5: add Dockerfiles and Docker Compose.
 - [ ] Fase 6: add CI build/test pipeline.
 - [ ] Fase 7: publish images to a registry.
