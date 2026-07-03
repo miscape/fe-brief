@@ -1,0 +1,15 @@
+sources:
+  - name: "estense.com"
+    type: "rss"
+    url: "http://www.estense.com/?feed=rss2"
+    enabled: true
+
+  - name: "ferraratoday.it"
+    type: "rss"
+    url: "https://www.ferraratoday.it/rss"
+    enabled: true
+
+  - name: "emilia-romagna"
+    type: "rss"
+    url: "http://www.ansa.it/web/notizie/regioni/emiliaromagna/emiliaromagna_rss.xml"
+    enabled: true
