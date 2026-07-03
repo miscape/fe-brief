@@ -7,7 +7,7 @@ RUN npm install
 
 COPY frontend ./
 
-ARG PUBLIC_API_BASE_URL=http://127.0.0.1:8000
+ARG PUBLIC_API_BASE_URL=""
 ENV PUBLIC_API_BASE_URL=${PUBLIC_API_BASE_URL}
 
 RUN npm run build
