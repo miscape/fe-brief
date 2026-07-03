@@ -1,0 +1,105 @@
+---
+import "../styles/global.css";
+---
+
+<!doctype html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Dashboard personale di notizie locali." />
+    <title>fe-brief</title>
+  </head>
+  <body>
+    <main class="page">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">Local news brief</p>
+          <h1>fe-brief</h1>
+        </div>
+        <button id="refresh-button" type="button">Aggiorna</button>
+      </header>
+
+      <section class="status" aria-live="polite">
+        <p id="status-message">Caricamento notizie...</p>
+      </section>
+
+      <section id="articles" class="articles" aria-label="Lista notizie"></section>
+    </main>
+
+    <script>
+      const apiBaseUrl = import.meta.env.PUBLIC_API_BASE_URL || "http://127.0.0.1:8000";
+      const articlesElement = document.querySelector("#articles");
+      const statusElement = document.querySelector("#status-message");
+      const refreshButton = document.querySelector("#refresh-button");
+
+      function formatDate(value) {
+        return new Intl.DateTimeFormat("it-IT", {
+          dateStyle: "medium",
+          timeStyle: "short",
+        }).format(new Date(value));
+      }
+
+      function stripHtml(value) {
+        const element = document.createElement("div");
+        element.innerHTML = value || "";
+        return element.textContent || element.innerText || "";
+      }
+
+      function renderArticles(articles) {
+        articlesElement.innerHTML = "";
+
+        if (!articles.length) {
+          articlesElement.innerHTML = `
+            <article class="empty-state">
+              <h2>Nessuna notizia salvata</h2>
+              <p>Esegui prima il fetch dal backend con <code>POST /api/fetch/run</code>.</p>
+            </article>
+          `;
+          return;
+        }
+
+        for (const article of articles) {
+          const item = document.createElement("article");
+          item.className = "article";
+          item.innerHTML = `
+            <div class="article-meta">
+              <span>${article.source}</span>
+              <time datetime="${article.published_at}">${formatDate(article.published_at)}</time>
+            </div>
+            <h2>${article.title}</h2>
+            <p>${stripHtml(article.description)}</p>
+            <a href="${article.url}" target="_blank" rel="noreferrer">Apri fonte originale</a>
+          `;
+          articlesElement.appendChild(item);
+        }
+      }
+
+      async function loadArticles() {
+        statusElement.textContent = "Caricamento notizie...";
+        refreshButton.disabled = true;
+
+        try {
+          const response = await fetch(`${apiBaseUrl}/api/articles`);
+
+          if (!response.ok) {
+            throw new Error(`Backend response: ${response.status}`);
+          }
+
+          const data = await response.json();
+          renderArticles(data.articles || []);
+          statusElement.textContent = `${data.count || 0} notizie salvate, ordinate dalla piu recente.`;
+        } catch (error) {
+          statusElement.textContent = "Errore nel caricamento delle notizie. Controlla che il backend sia avviato.";
+          articlesElement.innerHTML = "";
+          console.error(error);
+        } finally {
+          refreshButton.disabled = false;
+        }
+      }
+
+      refreshButton.addEventListener("click", loadArticles);
+      loadArticles();
+    </script>
+  </body>
+</html>
