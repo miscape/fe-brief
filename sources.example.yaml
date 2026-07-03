@@ -1,0 +1,13 @@
+# Copy this file to sources.yaml and customize it for your city.
+# The real sources.yaml file is ignored by Git.
+
+sources:
+  - name: "Comune - Notizie"
+    type: "rss"
+    url: "https://example.com/rss"
+    enabled: true
+
+  - name: "Giornale Locale"
+    type: "rss"
+    url: "https://example.com/local-news.xml"
+    enabled: true
