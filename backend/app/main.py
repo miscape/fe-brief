@@ -1,6 +1,8 @@
 from contextlib import asynccontextmanager
+import os
 
 from fastapi import Depends, FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 
 from app.config import load_sources
@@ -17,6 +19,19 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(title="fe-brief API", lifespan=lifespan)
+
+cors_origins = os.getenv(
+    "CORS_ORIGINS",
+    "http://localhost:4321,http://127.0.0.1:4321",
+).split(",")
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[origin.strip() for origin in cors_origins],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 @app.get("/health")
