@@ -75,9 +75,9 @@ The real `.env` and `sources.yaml` files are ignored by Git because they can con
 - [x] Fase 3: create Astro frontend with chronological article list.
 - [x] Fase 4: create Python worker that fetches sources every hour.
 - [x] Fase 5: add Dockerfiles and Docker Compose.
-- [ ] Fase 6: add CI build/test pipeline.
-- [ ] Fase 7: publish images to a registry.
-- [ ] Fase 8: deploy to a VPS with Docker Compose and reverse proxy.
+- [x] Fase 6: add CI build/test pipeline.
+- [x] Fase 7: publish images to a registry.
+- [x] Fase 8: deploy to a VPS with Docker Compose and reverse proxy.
 - [ ] Fase 9: add CI/CD deployment to VPS.
 - [ ] Fase 10: deploy to Kubernetes.
 - [ ] Fase 11: add Kubernetes rollout and rollback workflow.
