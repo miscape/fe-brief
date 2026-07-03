@@ -2,12 +2,14 @@
 
 `fe-brief` is a small DevOps portfolio project: a local news aggregator that collects articles from configured sources and shows them in chronological order.
 
+![dashboard](/docs/images/dashboard.png)
+
 The goal is not to build a complex product. The goal is to demonstrate an end-to-end DevOps workflow:
 
 1. Build a simple local application.
 2. Containerize it with Docker.
 3. Publish images to a container registry.
-4. Deploy it on a VPS.
+4. Deploy it on a VPS (AWS EC2 Istance).
 5. Move the deployment to Kubernetes.
 6. Add CI/CD practices.
 7. Document the process as a portfolio project.
