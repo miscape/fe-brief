@@ -70,11 +70,11 @@ The real `.env` and `sources.yaml` files are ignored by Git because they can con
 ## Roadmap
 
 - [x] Fase 0: define repository structure and starter files.
-- [ ] Fase 1: create FastAPI backend with health, article list, and manual fetch endpoints.
-- [ ] Fase 2: parse RSS/feed sources, save articles in PostgreSQL, deduplicate by URL hash.
-- [ ] Fase 3: create Astro frontend with chronological article list.
+- [x] Fase 1: create FastAPI backend with health, article list, and manual fetch endpoints.
+- [x] Fase 2: parse RSS/feed sources, save articles in PostgreSQL, deduplicate by URL hash.
+- [x] Fase 3: create Astro frontend with chronological article list.
 - [x] Fase 4: create Python worker that fetches sources every hour.
-- [ ] Fase 5: add Dockerfiles and Docker Compose.
+- [x] Fase 5: add Dockerfiles and Docker Compose.
 - [ ] Fase 6: add CI build/test pipeline.
 - [ ] Fase 7: publish images to a registry.
 - [ ] Fase 8: deploy to a VPS with Docker Compose and reverse proxy.
